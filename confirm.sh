@@ -1,12 +1,12 @@
 #!/bin/bash
 
-hostname=$(hostname -s)
+username=$(whoami)
 
-cd ~/net.ton.dev/tonos-cli/target/release
-./tonos-cli run 0:754a80838edae0902068152e78ef8cbd6c1edd693e2fda339a49cfebd75ae96e \
-        getTransactions {} --abi SafeMultisigWallet.abi.json | awk 'FNR == 20 {print $2}' | tr -d '"\,' > ~/ton-keys/gov.confirm.txid
+cd ~/tonos-cli/target/release
+./tonos-cli run 0:db99769aa440d5ae8ce33f32d02a31c3979af04852227237b8d741c035be0a66 \
+        getTransactions {} --abi SafeMultisigWallet.abi.json | awk 'FNR == 20 {print $2}' | tr -d '"\,' > ~/tonos-cli/target/release/gov.confirm.txid
 
-txid=$(cat ~/ton-keys/gov.confirm.txid)
-./tonos-cli call 0:754a80838edae0902068152e78ef8cbd6c1edd693e2fda339a49cfebd75ae96e \
+txid=$(cat ~/tonos-cli/target/release/gov.confirm.txid)
+./tonos-cli call 0:db99769aa440d5ae8ce33f32d02a31c3979af04852227237b8d741c035be0a66 \
         confirmTransaction "{"\"transactionId"\":"\"$txid"\"}" \
-        --abi SafeMultisigWallet.abi.json --sign "$hostname.keys.json"
+        --abi SafeMultisigWallet.abi.json --sign ~/tonos-cli/target/release/"$username.keys.json"
